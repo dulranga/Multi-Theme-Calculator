@@ -22,7 +22,6 @@ export default function Home() {
   }, [expression]);
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
-      console.log(e.key);
       switch (e.key) {
         case "Enter":
           submitInput();
@@ -144,7 +143,6 @@ export default function Home() {
         <div className={styles.display}>
           <textarea
             ref={displayRef}
-            type="text"
             value={expression.display}
             rows={1}
             onChange={forceChange}
