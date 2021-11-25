@@ -13,31 +13,26 @@ export default function Home() {
   const [themeID, setTheme] = useState(THEMES.dark);
 
   const toggleTheme = (e) => {
-    setTheme(e.target.dataset.type);
+    const newTheme = e.target.dataset.type;
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
   };
+  const keyboardEvents = (e) => {
+    switch (e.key) {
+      case "Enter":
+        submitInput();
+        break;
+      case "Delete":
+        resetExpression();
+        break;
+      case "Backspace":
+        delExpression();
+        break;
 
-  useLayoutEffect(() => {
-    displayRef.current.style.height = "auto";
-    displayRef.current.style.height = displayRef.current.scrollHeight + "px";
-  }, [expression]);
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      switch (e.key) {
-        case "Enter":
-          submitInput();
-          break;
-        case "Delete":
-          resetExpression();
-          break;
-        case "Backspace":
-          delExpression();
-          break;
-
-        default:
-          break;
-      }
-    });
-  }, []);
+      default:
+        break;
+    }
+  };
 
   const addExpression = ({ label, real }) => {
     setExpression((prev) => ({
@@ -61,7 +56,7 @@ export default function Home() {
         const submit = String(eval(prev.real) || "");
 
         return {
-          ...prev,
+          real: submit,
           display: submit.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         };
       } catch {
@@ -103,6 +98,18 @@ export default function Home() {
     { label: "=", onClick: submitInput, classes: ["bottom-buttons", "submit"] },
   ];
 
+  useLayoutEffect(() => {
+    displayRef.current.style.height = "auto";
+    displayRef.current.style.height = displayRef.current.scrollHeight + "px";
+  }, [expression]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyboardEvents);
+
+    const defaultTheme = localStorage.getItem("theme");
+    if (defaultTheme) setTheme(defaultTheme);
+  }, []);
+
   return (
     <div style={theme[themeID]} className={styles.wrapper}>
       <Head>
@@ -114,27 +121,16 @@ export default function Home() {
           <div className={styles.theme}>
             <div className={styles.theme_title}>theme</div>
             <div className={styles.toggler}>
-              <input
-                type="radio"
-                name="theme-toggle"
-                data-type={THEMES.dark}
-                checked={themeID === THEMES.dark}
-                onChange={toggleTheme}
-              />
-              <input
-                type="radio"
-                name="theme-toggle"
-                data-type={THEMES.light}
-                checked={themeID === THEMES.light}
-                onChange={toggleTheme}
-              />
-              <input
-                type="radio"
-                name="theme-toggle"
-                data-type={THEMES.neo}
-                checked={themeID === THEMES.neo}
-                onChange={toggleTheme}
-              />
+              {Object.keys(THEMES).map((theme, key) => (
+                <input
+                  key={key}
+                  type="radio"
+                  name="theme-toggle"
+                  data-type={THEMES[theme]}
+                  checked={themeID === THEMES[theme]}
+                  onChange={toggleTheme}
+                />
+              ))}
             </div>
           </div>
         </header>
@@ -154,6 +150,17 @@ export default function Home() {
           ))}
         </div>
       </main>
+      <div class={styles.attribution}>
+        Challenge by&nbsp;
+        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
+          Frontend Mentor
+        </a>
+        . Coded by &nbsp;
+        <a href="https://github.com/dulranga" target="_blank">
+          Dulranga Dhawanitha
+        </a>
+        .
+      </div>
     </div>
   );
 }
