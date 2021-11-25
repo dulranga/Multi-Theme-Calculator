@@ -150,16 +150,23 @@ export default function Home() {
           ))}
         </div>
       </main>
-      <div class={styles.attribution}>
+      <div className={styles.attribution}>
         Challenge by&nbsp;
-        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
-          Frontend Mentor
+        <a
+          href="https://www.frontendmentor.io?ref=challenge"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Frontend Mentor.
         </a>
-        . Coded by &nbsp;
-        <a href="https://github.com/dulranga" target="_blank">
+        Coded by &nbsp;
+        <a
+          href="https://github.com/dulranga"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Dulranga Dhawanitha
         </a>
-        .
       </div>
     </div>
   );
